@@ -1,10 +1,13 @@
 package com.srzeppa.domain;
 
+import java.util.ArrayList;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "CLIENT")
@@ -23,6 +26,9 @@ public class Client {
 
 	@Column(name = "PESEL")
 	private int pesel;
+	
+	@Column(name="PURCHASE")
+	private List<Purchase> purchase = new ArrayList<Purchase>();
 
 	public Client() {
 
@@ -58,6 +64,14 @@ public class Client {
 
 	public void setPesel(int pesel) {
 		this.pesel = pesel;
+	}
+
+	public List<Purchase> getPurchase() {
+		return purchase;
+	}
+
+	public void setPurchase(List<Purchase> purchase) {
+		this.purchase = purchase;
 	}
 
 }
