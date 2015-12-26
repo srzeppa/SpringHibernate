@@ -3,36 +3,26 @@ package com.srzeppa.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PURCHASE")
 public class Purchase {
 	
-	public Purchase() {
-		
-	}
-
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue
-	private long id;
-	
-	@Column(name = "PRICE")
+	private int id;
 	private double price;
-	
-	@Column(name = "DATE")
 	private String date;
-	
-	@Column(name = "COMMODITY")
 	private String commodity;
 
-	public long getId() {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

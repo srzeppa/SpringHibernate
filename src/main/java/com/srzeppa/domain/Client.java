@@ -2,43 +2,33 @@ package com.srzeppa.domain;
 
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name = "CLIENT")
 public class Client {
 
-	@Id
-	@Column(name = "ID")
-	@GeneratedValue
-	private long id;
-
-	@Column(name = "FIRSTNAME")
+	private int id;
 	private String firstname;
-
-	@Column(name = "LASTNAME")
 	private String lastname;
-
-	@Column(name = "PESEL")
 	private int pesel;
-	
-	@Column(name="PURCHASE")
 	private List<Purchase> purchase = new ArrayList<Purchase>();
 
-	public Client() {
-
-	}
-
-	public long getId() {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -66,6 +56,7 @@ public class Client {
 		this.pesel = pesel;
 	}
 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	public List<Purchase> getPurchase() {
 		return purchase;
 	}
