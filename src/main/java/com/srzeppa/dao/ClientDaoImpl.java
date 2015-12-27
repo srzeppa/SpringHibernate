@@ -56,5 +56,4 @@ public class ClientDaoImpl implements ClientDao{
 		clientToUpdate.setPesel(client.getPesel());
 		sessionFactory.getCurrentSession().update(clientToUpdate);
 	}
-
 }
