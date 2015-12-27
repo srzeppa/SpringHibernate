@@ -10,5 +10,6 @@ public interface ClientDao {
 	void deleteClient(Client client);
 	Client getClientById(int id);
 	void deleteClientById(int id);
+	void updateClient(Client client);
 
 }

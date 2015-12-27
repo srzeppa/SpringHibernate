@@ -9,11 +9,16 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(name = "get.All.Clients", query = "Select p from Client p"),
+})
 public class Client {
 
 	private int id;
