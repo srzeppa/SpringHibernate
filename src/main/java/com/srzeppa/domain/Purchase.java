@@ -5,9 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
+@NamedQueries({ 
+	@NamedQuery(name = "get.All.Purchases", query = "Select p from Purchase p"),
+})
 public class Purchase {
 	
 	private int id;
