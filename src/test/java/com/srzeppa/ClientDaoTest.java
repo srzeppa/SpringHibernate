@@ -1,8 +1,7 @@
 package com.srzeppa;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
+import static org.junit.Assert.assertNotSame;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,19 +9,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.srzeppa.dao.ClientDao;
-import com.srzeppa.dao.ClientDaoImpl;
 import com.srzeppa.domain.Client;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
-@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
 @Transactional
 public class ClientDaoTest{
 	
@@ -41,6 +38,10 @@ public class ClientDaoTest{
 	private final String FIRSTNAME_2 = "Zbysiu";
 	private final String LASTNAME_2 = "Wodecki";
 	private final int PESEL_2 = 67887;
+	
+	private final String FIRSTNAME_3 = "Updated";
+	private final String LASTNAME_3 = "Updated";
+	private final int PESEL_3 = 999;
 	
 	@Before
 	public void before(){
@@ -88,6 +89,31 @@ public class ClientDaoTest{
 		
 		retrievedClients = clientDao.getAllClients();
 		assertEquals(1, retrievedClients.size());
+	}
+	
+	@Test
+	public void updateClientCheck(){
+		String firstname, firstnameAfterUpdate;
+		String lastname, lastnameAfterUpdate;
+		int pesel, peselAfterUpdate;
+		
+		List<Client> clientBeforeUpdate = clientDao.getAllClients();
+		firstname = clientBeforeUpdate.get(0).getFirstname();
+		lastname = clientBeforeUpdate.get(0).getLastname();
+		pesel = clientBeforeUpdate.get(0).getPesel();
+		
+		Client clientForUpdate = new Client(FIRSTNAME_3,LASTNAME_3,PESEL_3);
+		clientForUpdate.setId(clientBeforeUpdate.get(0).getId());
+		clientDao.updateClient(clientForUpdate);
+		
+		List<Client> clientAfterUpdate = clientDao.getAllClients();
+		firstnameAfterUpdate = clientAfterUpdate.get(0).getFirstname();
+		lastnameAfterUpdate = clientAfterUpdate.get(0).getLastname();
+		peselAfterUpdate = clientAfterUpdate.get(0).getPesel();
+		
+		assertNotSame(firstname, firstnameAfterUpdate);
+		assertNotSame(lastname, lastnameAfterUpdate);
+		assertNotSame(pesel, peselAfterUpdate);
 	}
 	
 	@Test

@@ -20,12 +20,25 @@ import java.util.List;
 	@NamedQuery(name = "get.All.Clients", query = "Select p from Client p"),
 })
 public class Client {
+	
+	public Client(){
+		
+	}
+
+	public Client(String firstname, String lastname, int pesel) {
+		super();
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.pesel = pesel;
+	}
 
 	private int id;
 	private String firstname;
 	private String lastname;
 	private int pesel;
 	private List<Purchase> purchase = new ArrayList<Purchase>();
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
