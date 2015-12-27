@@ -36,10 +36,6 @@ public class ClientDaoImpl implements ClientDao{
 
 	public void deleteClient(Client client) {
 		client = (Client) sessionFactory.getCurrentSession().get(Client.class,client.getId());
-		
-		for (Purchase purchase : client.getPurchase()) {
-			sessionFactory.getCurrentSession().update(purchase);
-		}
 		sessionFactory.getCurrentSession().delete(client);
 	}
 
@@ -48,8 +44,9 @@ public class ClientDaoImpl implements ClientDao{
 	}
 
 	public void deleteClientById(int id) {
-		sessionFactory.getCurrentSession().delete(id);
-		
+		Client client = new Client();
+		client.setId(id);
+		sessionFactory.getCurrentSession().delete(client);
 	}
 
 	public void updateClient(Client client) {
@@ -58,7 +55,6 @@ public class ClientDaoImpl implements ClientDao{
 		clientToUpdate.setLastname(client.getLastname());
 		clientToUpdate.setPesel(client.getPesel());
 		sessionFactory.getCurrentSession().update(clientToUpdate);
-		
 	}
 
 }
