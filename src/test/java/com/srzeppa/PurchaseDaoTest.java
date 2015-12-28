@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.classic.Session;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ import com.srzeppa.domain.Purchase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
-@TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
 @Transactional
 public class PurchaseDaoTest {
 	
@@ -36,7 +37,7 @@ public class PurchaseDaoTest {
 	Purchase purchase1 = new Purchase();
 	Client client1 = new Client();
 	
-	private final double PRICE_1 = 100.0;
+	private final int PRICE_1 = 100;
 	private final String DATE_1 = "2000-01-01";
 	private final String COMMODITY_1 = "koszulka";
 	
@@ -53,7 +54,16 @@ public class PurchaseDaoTest {
 		LOGGER.info("purchase1: " + purchase1.getClient().getId());
 	}
 	
-	@SuppressWarnings("deprecation")
+	@After
+	public void after(){
+		List<Purchase> purchases = purchaseDao.getAllPurchases();
+		if(!purchases.isEmpty()){
+			for(Purchase p : purchases){
+				purchaseDao.deletePurchase(p);
+			}
+		}
+	}
+	
 	@Test
 	public void addPurchaseCheck(){
 		Purchase purchase = new Purchase();
@@ -70,9 +80,9 @@ public class PurchaseDaoTest {
 		
 		Purchase retrievedPurchase = purchaseDao.getPurchaseById(purchase.getId());
 
-		//assertEquals(PRICE_1, retrievedPurchase.getPrice());
-//		assertEquals(DATE_1, retrievedPurchase.getDate());
-//		assertEquals(COMMODITY_1, retrievedPurchase.getCommodity());
+		assertEquals(PRICE_1, retrievedPurchase.getPrice());
+		assertEquals(DATE_1, retrievedPurchase.getDate());
+		assertEquals(COMMODITY_1, retrievedPurchase.getCommodity());
 	}
 
 }

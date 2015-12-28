@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotSame;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,7 @@ import com.srzeppa.domain.Client;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
-@TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
 @Transactional
 public class ClientDaoTest{
 	
@@ -54,6 +55,16 @@ public class ClientDaoTest{
 		client2.setLastname(LASTNAME_2);
 		client2.setPesel(PESEL_2);
 		clientDao.addClient(client2);
+	}
+	
+	@After
+	public void after(){
+		List<Client> clients = clientDao.getAllClients();
+		if(!clients.isEmpty()){
+			for(Client c : clients){
+				clientDao.deleteClient(c);
+			}
+		}
 	}
 	
 	@Test
@@ -117,8 +128,16 @@ public class ClientDaoTest{
 	}
 	
 	@Test
-	public void deleteClientByIdCheck(){
-
+	public void getClientByIdCheck(){
+		Client clientForTest = new Client(FIRSTNAME_3, LASTNAME_3, PESEL_3);
+		Client clientForTest2 = new Client();
+		
+		clientDao.addClient(clientForTest);
+		clientForTest2 = clientDao.getClientById(clientForTest.getId());
+		
+		assertEquals(FIRSTNAME_3,clientForTest2.getFirstname());
+		assertEquals(LASTNAME_3, clientForTest2.getLastname());
+		assertEquals(PESEL_3, clientForTest2.getPesel());
 	}
 
 }

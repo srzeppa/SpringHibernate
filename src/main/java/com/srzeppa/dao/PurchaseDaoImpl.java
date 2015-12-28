@@ -1,6 +1,9 @@
 package com.srzeppa.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +15,8 @@ import com.srzeppa.domain.Purchase;
 
 @Component
 @Transactional
-public class PurchaseDaoImpl implements PurchaseDao{
-	
+public class PurchaseDaoImpl implements PurchaseDao {
+
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -26,7 +29,10 @@ public class PurchaseDaoImpl implements PurchaseDao{
 	}
 
 	public void addPurchase(Purchase purchase) {
-		sessionFactory.getCurrentSession().persist(purchase);
+		int id = (Integer) sessionFactory.getCurrentSession().save(purchase);
+		purchase.setId(id);
+		Client client = (Client) sessionFactory.getCurrentSession().get(Client.class, purchase.getClient().getId());
+		client.getPurchase().add(purchase);
 	}
 
 	public List<Purchase> getAllPurchases() {
@@ -34,7 +40,7 @@ public class PurchaseDaoImpl implements PurchaseDao{
 	}
 
 	public void deletePurchase(Purchase purchase) {
-		purchase = (Purchase) sessionFactory.getCurrentSession().get(Purchase.class,purchase.getId());
+		purchase = (Purchase) sessionFactory.getCurrentSession().get(Purchase.class, purchase.getId());
 		sessionFactory.getCurrentSession().delete(purchase);
 	}
 
@@ -44,7 +50,26 @@ public class PurchaseDaoImpl implements PurchaseDao{
 
 	public void deletePurchaseById(int id) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public List<Purchase> getAllPurchasesByClient(Client client) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Purchase> getAllPurchasesByClientName(String name) {
+		List<Purchase> purchase = new ArrayList<Purchase>();
+		Pattern pattern = Pattern.compile(".*" + name + ".*");
+		Matcher matcher;
+		for (Purchase p : getAllPurchases()) {
+			matcher = pattern.matcher(p.getClient().getLastname());
+			if (matcher.matches())
+				purchase.add(p);
+		}
+		return purchase;
 	}
 
 }
