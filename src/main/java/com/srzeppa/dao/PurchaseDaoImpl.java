@@ -45,7 +45,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 		purchase = (Purchase) sessionFactory.getCurrentSession().get(Purchase.class, purchase.getId());
         Client c = (Client) sessionFactory.getCurrentSession().get(Client.class, purchase.getClient().getId());
         c.getPurchase().remove(purchase);
-        sessionFactory.getCurrentSession().delete(c);
+        sessionFactory.getCurrentSession().delete(purchase);
 	}
 	
 	@Override

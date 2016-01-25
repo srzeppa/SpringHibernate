@@ -23,7 +23,7 @@ import com.srzeppa.domain.Purchase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
-@TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
 @Transactional
 public class PurchaseDaoTest {
 	
@@ -51,23 +51,18 @@ public class PurchaseDaoTest {
 		client1.setLastname(LASTNAME_1);
 		client1.setPesel(PESEL_1);
 		
-		LOGGER.info("-----client set");
-		
 		purchase1.setPrice(PRICE_1);
 		purchase1.setDate(DATE_1);
 		purchase1.setCommodity(COMMODITY_1);
 		purchase1.setClient(client1);
 		
-		LOGGER.info("-----purchase set");
-		
 		clientDao.addClient(client1);
-		LOGGER.info("-----client add");
 		purchaseDao.addPurchase(purchase1);
-		LOGGER.info("-----purchase add");
 	}
 	
 	@After
 	public void after(){
+		List<Client> client = clientDao.getAllClients();
 		List<Purchase> purchases = purchaseDao.getAllPurchases();
 		if(!purchases.isEmpty()){
 			for(Purchase p : purchases){
@@ -80,6 +75,7 @@ public class PurchaseDaoTest {
 	public void addPurchaseCheck(){
 		List<Client> clients = clientDao.getAllClients();
 		Purchase purchase = new Purchase(PRICE_1,DATE_1,COMMODITY_1,clients.get(0));
+		LOGGER.info("-------"+clients.get(0).getFirstname());
 		purchaseDao.addPurchase(purchase);
 		
 		Purchase retrievedPurchase = purchaseDao.getPurchaseById(purchase.getId());
@@ -87,6 +83,21 @@ public class PurchaseDaoTest {
 		assertEquals(PRICE_1, retrievedPurchase.getPrice());
 		assertEquals(DATE_1, retrievedPurchase.getDate());
 		assertEquals(COMMODITY_1, retrievedPurchase.getCommodity());
+		assertEquals(FIRSTNAME_1, retrievedPurchase.getClient().getFirstname());
+	}
+	
+	@Test
+	public void getPurchaseByIdCheck(){
+		Purchase purchaseForTest = new Purchase(PRICE_1, DATE_1, COMMODITY_1, client1);
+		Purchase purchaseForTest2 = new Purchase();
+		
+		purchaseDao.addPurchase(purchaseForTest);
+		purchaseForTest2 = purchaseDao.getPurchaseById(purchaseForTest.getId());
+		
+		assertEquals(PRICE_1, purchaseForTest2.getPrice());
+		assertEquals(DATE_1, purchaseForTest2.getDate());
+		assertEquals(COMMODITY_1, purchaseForTest2.getCommodity());
+		assertEquals(client1, purchaseForTest2.getClient());
 	}
 
 }
