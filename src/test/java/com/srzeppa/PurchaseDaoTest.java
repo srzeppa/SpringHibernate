@@ -23,7 +23,7 @@ import com.srzeppa.domain.Purchase;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
-@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
+@TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
 @Transactional
 public class PurchaseDaoTest {
 	
@@ -41,17 +41,29 @@ public class PurchaseDaoTest {
 	private final String DATE_1 = "2000-01-01";
 	private final String COMMODITY_1 = "koszulka";
 	
+	private final String FIRSTNAME_1 = "Bolek";
+	private final String LASTNAME_1 = "Lolek";
+	private final int PESEL_1 = 213213;
+	
 	@Before
 	public void before(){
+		client1.setFirstname(FIRSTNAME_1);
+		client1.setLastname(LASTNAME_1);
+		client1.setPesel(PESEL_1);
+		
+		LOGGER.info("-----client set");
+		
 		purchase1.setPrice(PRICE_1);
 		purchase1.setDate(DATE_1);
 		purchase1.setCommodity(COMMODITY_1);
+		purchase1.setClient(client1);
 		
-		List<Client> clients = clientDao.getAllClients();
-		purchase1.setClient(clients.get(0));
+		LOGGER.info("-----purchase set");
 		
+		clientDao.addClient(client1);
+		LOGGER.info("-----client add");
 		purchaseDao.addPurchase(purchase1);
-		LOGGER.info("purchase1: " + purchase1.getClient().getId());
+		LOGGER.info("-----purchase add");
 	}
 	
 	@After
@@ -66,16 +78,8 @@ public class PurchaseDaoTest {
 	
 	@Test
 	public void addPurchaseCheck(){
-		Purchase purchase = new Purchase();
-		purchase.setPrice(PRICE_1);
-		purchase.setDate(DATE_1);
-		purchase.setCommodity(COMMODITY_1);
-		
 		List<Client> clients = clientDao.getAllClients();
-		purchase.setClient(clients.get(0));
-		
-		LOGGER.info("purchase1222: " + purchase1.getClient().getId());
-
+		Purchase purchase = new Purchase(PRICE_1,DATE_1,COMMODITY_1,clients.get(0));
 		purchaseDao.addPurchase(purchase);
 		
 		Purchase retrievedPurchase = purchaseDao.getPurchaseById(purchase.getId());

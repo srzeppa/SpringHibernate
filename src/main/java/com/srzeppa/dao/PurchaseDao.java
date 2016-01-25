@@ -11,7 +11,6 @@ public interface PurchaseDao {
 	List<Purchase> getAllPurchases();
 	void deletePurchase(Purchase purchase);
 	Purchase getPurchaseById(int id);
-	void deletePurchaseById(int id);
 	List<Purchase> getAllPurchasesByClient(Client client);
 	List<Purchase> getAllPurchasesByClientName(String name);
 

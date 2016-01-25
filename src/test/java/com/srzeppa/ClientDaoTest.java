@@ -69,9 +69,6 @@ public class ClientDaoTest{
 	
 	@Test
 	public void addClientCheck() {
-
-		List<Client> retrievedClients = clientDao.getAllClients();
-
 		Client client = new Client();
 		client.setFirstname(FIRSTNAME_2);
 		client.setLastname(LASTNAME_2);
@@ -80,6 +77,9 @@ public class ClientDaoTest{
 		clientDao.addClient(client);
 		
 		Client retrievedClient = clientDao.getClientById(client.getId());
+		
+		LOGGER.info("---------------------------- clientDao.getClientById(client.getId(): " + clientDao.getClientById(client.getId()));
+		LOGGER.info("---------------------------- retrievedClient.getFirstname(): " + retrievedClient.getFirstname());
 
 		assertEquals(FIRSTNAME_2, retrievedClient.getFirstname());
 		assertEquals(LASTNAME_2, retrievedClient.getLastname());

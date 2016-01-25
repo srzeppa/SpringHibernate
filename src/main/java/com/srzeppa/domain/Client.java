@@ -14,6 +14,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+
 import java.util.List;
 
 @Entity
@@ -73,7 +76,7 @@ public class Client {
 		this.pesel = pesel;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "client")//orphanRemoval = true, 
 	public List<Purchase> getPurchase() {
 		return purchase;
 	}

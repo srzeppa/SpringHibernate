@@ -19,16 +19,15 @@ import javax.persistence.Table;
 })
 public class Purchase {
 	
+	public Purchase() {
+		
+	}
+	
 	public Purchase(int price, String date, String commodity, Client client) {
-		super();
 		this.price = price;
 		this.date = date;
 		this.commodity = commodity;
 		this.client = client;
-	}
-
-	public Purchase() {
-		super();
 	}
 
 	private int id;
@@ -72,7 +71,7 @@ public class Purchase {
 		this.commodity = commodity;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CLIENT_ID", nullable = false)
 	public Client getClient() {
 		return client;

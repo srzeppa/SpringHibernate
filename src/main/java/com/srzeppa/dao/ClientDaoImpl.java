@@ -25,30 +25,30 @@ public class ClientDaoImpl implements ClientDao{
 		this.sessionFactory = sessionFactory;
 	}
 
+	@Override
 	public void addClient(Client client) {
-		sessionFactory.getCurrentSession().persist(client);
+		sessionFactory.getCurrentSession().save(client);
 		
 	}
 
+	@Override
 	public List<Client> getAllClients() {
 		return sessionFactory.getCurrentSession().getNamedQuery("get.All.Clients").list();
 	}
 
+	@Override
 	public void deleteClient(Client client) {
 		client = (Client) sessionFactory.getCurrentSession().get(Client.class,client.getId());
+		
 		sessionFactory.getCurrentSession().delete(client);
 	}
 
+	@Override
 	public Client getClientById(int id) {
 		return (Client) sessionFactory.getCurrentSession().get(Client.class, id);
 	}
 
-	public void deleteClientById(int id) {
-		Client client = new Client();
-		client.setId(id);
-		sessionFactory.getCurrentSession().delete(client);
-	}
-
+	@Override
 	public void updateClient(Client client) {
 		Client clientToUpdate = getClientById(client.getId());
 		clientToUpdate.setFirstname(client.getFirstname());
