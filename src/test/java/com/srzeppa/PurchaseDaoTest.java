@@ -36,14 +36,24 @@ public class PurchaseDaoTest {
 	
 	Purchase purchase1 = new Purchase();
 	Client client1 = new Client();
+	Purchase purchase2 = new Purchase();
+	Client client2 = new Client();
 	
 	private final int PRICE_1 = 100;
 	private final String DATE_1 = "2000-01-01";
 	private final String COMMODITY_1 = "koszulka";
 	
+	private final int PRICE_2 = 200;
+	private final String DATE_2 = "1999-01-01";
+	private final String COMMODITY_2 = "spodnie";
+	
 	private final String FIRSTNAME_1 = "Bolek";
 	private final String LASTNAME_1 = "Lolek";
 	private final int PESEL_1 = 213213;
+	
+	private final String FIRSTNAME_2 = "Zdzisiu";
+	private final String LASTNAME_2 = "Wiesiu";
+	private final int PESEL_2 = 213213;
 	
 	@Before
 	public void before(){
@@ -58,6 +68,18 @@ public class PurchaseDaoTest {
 		
 		clientDao.addClient(client1);
 		purchaseDao.addPurchase(purchase1);
+		
+		client2.setFirstname(FIRSTNAME_2);
+		client2.setLastname(LASTNAME_2);
+		client2.setPesel(PESEL_2);
+		
+		purchase2.setPrice(PRICE_2);
+		purchase2.setDate(DATE_2);
+		purchase2.setCommodity(COMMODITY_2);
+		purchase2.setClient(client2);
+		
+		clientDao.addClient(client2);
+		purchaseDao.addPurchase(purchase2);
 	}
 	
 	@After
@@ -98,6 +120,22 @@ public class PurchaseDaoTest {
 		assertEquals(DATE_1, purchaseForTest2.getDate());
 		assertEquals(COMMODITY_1, purchaseForTest2.getCommodity());
 		assertEquals(client1, purchaseForTest2.getClient());
+	}
+	
+	@Test
+	public void getAllPurchasesCheck(){
+		List<Purchase> purchases = purchaseDao.getAllPurchases();
+		assertEquals(2, purchases.size());
+	}
+	
+	@Test
+	public void deletePurchaseCheck(){
+		List<Purchase> retrievedPurchases = purchaseDao.getAllPurchases();
+		
+		purchaseDao.deletePurchase(retrievedPurchases.get(0));
+		
+		retrievedPurchases = purchaseDao.getAllPurchases();
+		assertEquals(1, retrievedPurchases.size());
 	}
 
 }
