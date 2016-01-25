@@ -55,8 +55,12 @@ public class PurchaseDaoImpl implements PurchaseDao {
 
 	@Override
 	public List<Purchase> getAllPurchasesByClient(Client client) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Purchase> purchases = getAllPurchases();
+        List<Purchase> p = new ArrayList<Purchase>();
+        for (Purchase purch : purchases)
+            if(purch.getClient().getId() == client.getId())
+                p.add(purch);
+        return p;
 	}
 
 	@Override
@@ -70,6 +74,25 @@ public class PurchaseDaoImpl implements PurchaseDao {
 				purchase.add(p);
 		}
 		return purchase;
+	}
+
+	@Override
+	public void updatePurchase(Purchase purchase, Client client, String commodity, String date, int price) {
+        purchase = (Purchase) sessionFactory.getCurrentSession().get(Purchase.class, purchase.getId());
+        Client c = (Client) sessionFactory.getCurrentSession().get(Client.class, purchase.getClient().getId());
+        int i = 0;
+        for(Purchase p : c.getPurchase()) {
+            if (p == purchase)
+                break;
+            i++;
+        }
+        
+        purchase.setCommodity(commodity);
+        purchase.setDate(date);
+        purchase.setPrice(price);
+        purchase.setClient(client);
+        
+        sessionFactory.getCurrentSession().update(purchase);
 	}
 
 }

@@ -13,5 +13,6 @@ public interface PurchaseDao {
 	Purchase getPurchaseById(int id);
 	List<Purchase> getAllPurchasesByClient(Client client);
 	List<Purchase> getAllPurchasesByClientName(String name);
+	void updatePurchase(Purchase purchase, Client client, String commodity, String date, int price);
 
 }
