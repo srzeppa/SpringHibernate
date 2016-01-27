@@ -1,7 +1,6 @@
 package com.srzeppa;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,12 +133,14 @@ public class PurchaseDaoTest {
 	public void deletePurchaseCheck() {
 		List<Purchase> retrievedPurchasesBeforeDelete = purchaseDao.getAllPurchases();
 		int sizePurchasesBeforeDelete = retrievedPurchasesBeforeDelete.size();
+		int idDeletedPurchase = retrievedPurchasesBeforeDelete.get(0).getId();
 		purchaseDao.deletePurchase(retrievedPurchasesBeforeDelete.get(0));
 
 		List<Purchase> retrievedPurchasesAfterDelete = purchaseDao.getAllPurchases();
 		int sizePurchasesAfterDelete = retrievedPurchasesAfterDelete.size();
 
 		assertNotSame(sizePurchasesAfterDelete, sizePurchasesBeforeDelete);
+		assertNull(purchaseDao.getPurchaseById(idDeletedPurchase));
 	}
 
 	@Test

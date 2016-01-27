@@ -2,6 +2,8 @@ package com.srzeppa;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -94,6 +96,7 @@ public class ClientDaoTest{
 		List<Client> retrievedClientsBeforeDelete = clientDao.getAllClients();
 		int sizeBeforeDelete = retrievedClientsBeforeDelete.size();
 		
+		int idDeletedClient = retrievedClientsBeforeDelete.get(0).getId();
 		clientDao.deleteClient(retrievedClientsBeforeDelete.get(0));
 		
 		List<Client> retrievedClientsAfterDelete = clientDao.getAllClients();
@@ -101,6 +104,7 @@ public class ClientDaoTest{
 		
 		LOGGER.info("sizeAfterDelete: "+sizeAfterDelete + "| sizeBeforeDelete: " + sizeBeforeDelete);
 		assertNotSame(sizeAfterDelete, sizeBeforeDelete);
+		assertNull(clientDao.getClientById(idDeletedClient));
 	}
 	
 	@Test
