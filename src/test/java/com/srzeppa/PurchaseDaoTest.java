@@ -153,11 +153,6 @@ public class PurchaseDaoTest {
 		int tmp = 0;
 
 		for (int i = 0; i < purchases.size(); i++) {
-			/*
-			 * if (Pattern.compile(".*" + pattern +
-			 * ".*").matcher(purchaseDao.getPurchaseById(i).getClient().
-			 * getLastname()) .matches())
-			 */
 			LOGGER.info("******" + pattern);
 			LOGGER.info("******" + purchaseDao.getPurchaseById(purchases.get(i).getId()).getClient().getLastname());
 			if (pattern.equals(purchaseDao.getPurchaseById(purchases.get(i).getId()).getClient().getLastname()))
