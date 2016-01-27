@@ -77,22 +77,13 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public void updatePurchase(Purchase purchase, Client client, String commodity, String date, int price) {
-        purchase = (Purchase) sessionFactory.getCurrentSession().get(Purchase.class, purchase.getId());
-        Client c = (Client) sessionFactory.getCurrentSession().get(Client.class, purchase.getClient().getId());
-        int i = 0;
-        for(Purchase p : c.getPurchase()) {
-            if (p == purchase)
-                break;
-            i++;
-        }
-        
-        purchase.setCommodity(commodity);
-        purchase.setDate(date);
-        purchase.setPrice(price);
-        purchase.setClient(client);
-        
-        sessionFactory.getCurrentSession().update(purchase);
+	public void updatePurchase(Purchase purchase) {
+		Purchase purchaseToUpdate = getPurchaseById(purchase.getId());
+		purchaseToUpdate.setCommodity(purchase.getCommodity());
+		purchaseToUpdate.setDate(purchase.getDate());
+		purchaseToUpdate.setPrice(purchase.getPrice());
+		purchaseToUpdate.setClient(purchase.getClient());
+		sessionFactory.getCurrentSession().update(purchaseToUpdate);
 	}
 
 }

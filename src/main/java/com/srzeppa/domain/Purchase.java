@@ -71,7 +71,7 @@ public class Purchase {
 		this.commodity = commodity;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "CLIENT_ID", nullable = false)
 	public Client getClient() {
 		return client;

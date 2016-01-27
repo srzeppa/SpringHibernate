@@ -75,11 +75,7 @@ public class ClientDaoTest{
 		client.setPesel(PESEL_2);
 
 		clientDao.addClient(client);
-		
 		Client retrievedClient = clientDao.getClientById(client.getId());
-		
-		LOGGER.info("---------------------------- clientDao.getClientById(client.getId(): " + clientDao.getClientById(client.getId()));
-		LOGGER.info("---------------------------- retrievedClient.getFirstname(): " + retrievedClient.getFirstname());
 
 		assertEquals(FIRSTNAME_2, retrievedClient.getFirstname());
 		assertEquals(LASTNAME_2, retrievedClient.getLastname());
@@ -89,17 +85,22 @@ public class ClientDaoTest{
 	@Test
 	public void getAllClientsCheck(){
 		List<Client> clients = clientDao.getAllClients();
-		assertEquals(2, clients.size());
+		int sizeBeforeGetAll = clients.size();
+		assertEquals(sizeBeforeGetAll, clients.size());
 	}
 	
 	@Test
 	public void deleteClientCheck(){
-		List<Client> retrievedClients = clientDao.getAllClients();
+		List<Client> retrievedClientsBeforeDelete = clientDao.getAllClients();
+		int sizeBeforeDelete = retrievedClientsBeforeDelete.size();
 		
-		clientDao.deleteClient(retrievedClients.get(0));
+		clientDao.deleteClient(retrievedClientsBeforeDelete.get(0));
 		
-		retrievedClients = clientDao.getAllClients();
-		assertEquals(1, retrievedClients.size());
+		List<Client> retrievedClientsAfterDelete = clientDao.getAllClients();
+		int sizeAfterDelete = retrievedClientsAfterDelete.size();
+		
+		LOGGER.info("sizeAfterDelete: "+sizeAfterDelete + "| sizeBeforeDelete: " + sizeBeforeDelete);
+		assertNotSame(sizeAfterDelete, sizeBeforeDelete);
 	}
 	
 	@Test
