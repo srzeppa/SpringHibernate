@@ -48,6 +48,10 @@ public class PurchaseDaoTest {
 	private final int PRICE_2 = 200;
 	private final String DATE_2 = "1999-01-01";
 	private final String COMMODITY_2 = "spodnie";
+	
+	private final int PRICE_3 = 666;
+	private final String DATE_3 = "1999-01-01";
+	private final String COMMODITY_3 = "test";
 
 	private final String FIRSTNAME_1 = "Bolek";
 	private final String LASTNAME_1 = "Lolek";
@@ -155,13 +159,40 @@ public class PurchaseDaoTest {
 		for (int i = 0; i < purchases.size(); i++) {
 			LOGGER.info("******" + pattern);
 			LOGGER.info("******" + purchaseDao.getPurchaseById(purchases.get(i).getId()).getClient().getLastname());
+			LOGGER.info("******" + purchaseDao.getPurchaseById(purchases.get(i).getId()).getCommodity());
 			if (pattern.equals(purchaseDao.getPurchaseById(purchases.get(i).getId()).getClient().getLastname()))
 				tmp++;
 		}
 
+		LOGGER.info("*****"+tmp);
 		List<Purchase> purchasesByName = purchaseDao.getAllPurchasesByClientName(pattern);
 
 		assertEquals(purchasesByName.size(), tmp);
+	}
+	
+	@Test
+	public void updatePurchaseCheck(){
+		String date, dateAfterUpdate;
+		String commodity, commodityAfterUpdate;
+		int price, priceAfterUpdate;
+
+		List<Purchase> purchaseBeforeUpdate = purchaseDao.getAllPurchases();
+		date = purchaseBeforeUpdate.get(0).getDate();
+		commodity = purchaseBeforeUpdate.get(0).getCommodity();
+		price = purchaseBeforeUpdate.get(0).getPrice();
+
+		Purchase purchaseForUpdate = new Purchase(PRICE_3,DATE_3,COMMODITY_3,client2);
+		purchaseForUpdate.setId(purchaseBeforeUpdate.get(0).getId());
+		purchaseDao.updatePurchase(purchaseForUpdate);
+
+		List<Purchase> purchaseAfterUpdate = purchaseDao.getAllPurchases();
+		dateAfterUpdate = purchaseAfterUpdate.get(0).getDate();
+		commodityAfterUpdate = purchaseAfterUpdate.get(0).getCommodity();
+		priceAfterUpdate = purchaseAfterUpdate.get(0).getPrice();
+
+		assertNotSame(date, dateAfterUpdate);
+		assertNotSame(commodity, commodityAfterUpdate);
+		assertNotSame(price, priceAfterUpdate);
 	}
 
 }
